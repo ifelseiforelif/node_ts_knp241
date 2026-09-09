@@ -1,17 +1,54 @@
 import http from "node:http"
 import fs from "node:fs"
 import path from "node:path"
+import { books } from "./data/books.js"
+import { showAllBooks, showBook } from "./utils/showBooks.js"
+import { URL } from "node:url"
+import { BookType } from "./types/BookType.js"
 const PORT:number = 4200 
 
 /*
-https://shop.com/product?name=phone&price=1000
+https://shop.com/product/?name=phone&price=1000&key=value&key2=value2  - query params
+https://shop.com/category/phones/32  - params
+http://localhost:4200/books
 params
 query params
 body
+GET POST PUT PATCH DELETE
+CRUD - Create Read Update Delete
+REST API 
 */
 const server = http.createServer((req,res)=>{
+    const url = new URL(req.url ?? "/", `http://${req.headers.host}`)
     const PATH_TO_PAGES = path.join("src","pages") 
-    console.log(req.url, path.extname(req.url as string))
+    if(req.method==="GET" &&  req.url==='/books')
+    {
+        const books_content:string = showAllBooks(books)
+        res.setHeader("Content-Type", "text/html; charset=utf-8")
+        res.write(books_content)
+        res.end()
+    }
+    else if(req.method === "GET" && url.pathname==='/book/' && url.searchParams)
+    {
+        if(url.searchParams.get("id")!==undefined)
+        {
+            const id:number = Number(url.searchParams.get("id"))
+            const book : BookType|undefined= books.filter(book=>book.id===id)[0]
+            console.log(book)
+            if(book!==undefined)
+            {
+                res.setHeader("Content-Type", "text/html; charset=utf-8")
+                res.write(showBook(book))    
+            }
+        }
+        
+        res.end()
+    }
+
+
+
+
+
     if(req.method==="GET" && path.extname(req.url as string)==='.css')
     {
         const PATH_TO_CSS = path.join("src","styles",req.url as string)
