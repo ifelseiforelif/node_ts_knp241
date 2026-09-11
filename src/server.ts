@@ -1,11 +1,11 @@
 import http from "node:http"
 import fs from "node:fs"
 import path from "node:path"
+import { URL } from "node:url"
+import 'dotenv/config'
 import { books } from "./data/books.js"
 import { showAllBooks, showBook } from "./utils/showBooks.js"
-import { URL } from "node:url"
 import { BookType } from "./types/BookType.js"
-const PORT:number = 4200 
 
 /*
 https://shop.com/product/?name=phone&price=1000&key=value&key2=value2  - query params
@@ -45,7 +45,10 @@ const server = http.createServer((req,res)=>{
         res.end()
     }
 
-
+    else if(req.method==="POST" && req.url==="books")
+    {
+        res.write("Hello")
+    }
 
 
 
@@ -73,20 +76,20 @@ const server = http.createServer((req,res)=>{
 
         res.write(content)
     }
-    else if(req.method === "POST"){
-        res.setHeader("Content-Type", "application/json; charset=utf-8")
-        const user = {
-            name:"Alex",
-            age:20
-        }
-        res.write(JSON.stringify(user))
-    }
+    // else if(req.method === "POST"){
+    //     res.setHeader("Content-Type", "application/json; charset=utf-8")
+    //     const user = {
+    //         name:"Alex",
+    //         age:20
+    //     }
+    //     res.write(JSON.stringify(user))
+    // }
      else if(req.method === "PUT"){
         res.write(`Ти хочеш оновити дані. Request: ${req.method}`)
     }
     
     res.end()
 })
-server.listen(PORT,()=>{
-    console.log(`Server http://localhost:${PORT} has been started...`)
+server.listen(process.env.PORT,()=>{
+    console.log(`Server ${process.env.HOST}:${process.env.PORT} has been started...`)
 })
