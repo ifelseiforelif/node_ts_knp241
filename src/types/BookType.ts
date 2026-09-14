@@ -5,4 +5,6 @@ type BookType = {
     is_active:boolean,
     image?:string
 }
-export {BookType}
+
+type BookCreateType = Omit<BookType, "id">;
+export {BookType, BookCreateType}
