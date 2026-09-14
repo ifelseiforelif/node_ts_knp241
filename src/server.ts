@@ -3,6 +3,7 @@ import "dotenv/config"
 import { BookType } from "./types/BookType.js"
 import { books } from "./data/books.js"
 import { BookResponseType } from "./types/BookResponseType.js"
+import { getBooksByTitle } from "./utils/showBooks.js"
 
 const cl = console.log
 const PORT = process.env.PORT || 3200
@@ -34,11 +35,21 @@ app.get('/books/:id', (req,res)=>{
     res.status(response.status).json(response)
 })
 
+
+//book/?title=
+
 //Отримати всі книжки
 app.get('/books',(req,res)=>{
     const exist_book:boolean = books.length>0
+    const title = String(req.query.title)
+    let our_books:BookType[]|null = null;
+    if(title!==undefined)
+    {
+        our_books = getBooksByTitle(title, books)
+    }
+  
     const response:BookResponseType = {
-        data:exist_book?books:null,
+        data:exist_book?(our_books!==null?our_books:books):null,
         error:exist_book?null:"Books list is empty",
         status:exist_book?200:404
     };

@@ -3,6 +3,8 @@ import { BookType } from "../types/BookType.js";
 type showBookType = (book:BookType)=>string;
 type showBooksType = (book:Array<BookType>)=>string;
 
+type getBooksByTitleType = (title:string, books:BookType[])=>BookType[]|null;
+
 const showBook:showBookType = (book)=>{
     return `<div class="book-card">
 <h2 class="book-title">${book.title}</h2>
@@ -26,4 +28,13 @@ const showAllBooks:showBooksType = (books)=>{
     return books_content
 }
 
-export {showAllBooks, showBook}
+const getBooksByTitle:getBooksByTitleType = (title, books)=>{
+    const books_filtred = books.filter(book=>title.toLowerCase().trim()===book.title.toLocaleLowerCase().trim())
+    if(books_filtred.length>0)
+    {
+        return books_filtred
+    }
+    return null
+}
+
+export {showAllBooks, showBook, getBooksByTitle}

@@ -30,6 +30,18 @@ const books: Array<BookType> = [
     title: "Маленький принц",
     price: 280,
     is_active: true
+  },
+  {
+    id: 6,
+    title: "Test",
+    price: 280,
+    is_active: true
+  },
+  {
+    id: 7,
+    title: "test",
+    price: 180,
+    is_active: true
   }
 ];
 
