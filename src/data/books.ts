@@ -5,13 +5,15 @@ const books: Array<BookType> = [
     id: 1,
     title: "Кобзар",
     price: 250,
-    is_active: true
+    is_active: true,
+    image: "lake.webp"
   },
   {
     id: 2,
     title: "Тигролови",
     price: 320,
-    is_active: true
+    is_active: true,
+    image:"sun.webp"
   },
   {
     id: 3,

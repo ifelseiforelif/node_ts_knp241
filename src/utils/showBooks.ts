@@ -2,6 +2,8 @@ import { BookType } from "../types/BookType.js";
 
 type showBookType = (book:BookType)=>string;
 type showBooksType = (book:Array<BookType>)=>string;
+type compareBookType = (b1:BookType, b2:BookType)=>number
+
 
 type getBooksByTitleType = (title:string, books:BookType[])=>BookType[]|null;
 
@@ -37,4 +39,10 @@ const getBooksByTitle:getBooksByTitleType = (title, books)=>{
     return null
 }
 
-export {showAllBooks, showBook, getBooksByTitle}
+
+const compareBook:compareBookType = (b1:BookType, b2:BookType)=>{
+    return b2.id-b1.id
+}
+
+
+export {showAllBooks, showBook, getBooksByTitle, compareBook}
