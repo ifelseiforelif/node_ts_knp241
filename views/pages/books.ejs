@@ -1,6 +1,7 @@
 <p>Books page</p>
 <h1>Books</h1>
 <div class="books">
+  <% if(books.length>0){%>
   <% books.forEach(book => { %>
   <div class="card" style="width: 18rem;">
     <img src="images/<%=book.image%>" class="card-img-top" alt="...">
@@ -10,5 +11,9 @@
       <a href="#" class="btn btn-primary">Buy</a>
     </div>
   </div>
-    <% }) %>
+    <% })} else{%>
+      <p>Books list is empty</p>
+      <%
+    } %>
+
 </div>

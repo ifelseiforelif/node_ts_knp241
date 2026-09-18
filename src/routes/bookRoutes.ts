@@ -3,23 +3,20 @@ import { books } from "../data/books.js";
 import { BookCreateType, BookType } from "../types/BookType.js";
 import { compareBook, getBooksByTitle } from "../utils/showBooks.js";
 import { BookResponseType } from "../types/BookResponseType.js";
+import { pool } from "../db/db_connection.js";
 
 const bookRouter = Router();
 
 //отримання всіх книжок, або пошук по ?title=book_name
 bookRouter.get(
   "/",
-  (
+  async (
     req: Request<{}, BookResponseType, null, { title: string }>,
     res: Response,
   ) => {
-    const exist_book: boolean = books.length > 0;
-    const title = String(req.query.title);
-    let our_books: BookType[] | null = null;
-    if (title !== undefined) {
-      our_books = getBooksByTitle(title, books);
-    }
-    res.render("pages/books", { books, title: "Books" });
+    const data = await pool.query("SELECT * FROM books");
+
+    res.render("pages/books", { books: data.rows, title: "Books" });
     // const response: BookResponseType = {
     //   data: exist_book ? (our_books !== null ? our_books : books) : null,
     //   error: exist_book ? null : "Books list is empty",
@@ -33,16 +30,11 @@ bookRouter.get(
 );
 
 //отримання книжки за id
-bookRouter.get("/:id", (req: Request<{ id: number }>, res) => {
+bookRouter.get("/:id", async (req: Request<{ id: number }>, res) => {
   const id = +req.params.id;
-  const book: BookType | undefined = books.find((book) => book.id === id);
-  const exist_book: boolean = book !== undefined;
-  const response: BookResponseType = {
-    data: exist_book ? (book as BookType) : null,
-    error: exist_book ? null : "The book not found",
-    status: exist_book ? 200 : 404,
-  };
-  res.status(response.status).json(response);
+  const data = await pool.query("SELECT * FROM books WHERE id=$1 ", [id]);
+  console.log(data.rows[0]);
+  res.render("pages/books", { books: data.rows, title: "Books" });
 });
 
 //створення книжки
