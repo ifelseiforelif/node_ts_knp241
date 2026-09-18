@@ -1,11 +1,14 @@
 <p>Books page</p>
 <h1>Books</h1>
-
-<ul>
+<div class="books">
   <% books.forEach(book => { %>
-    <li>
-      <%= book.title %> — <%= book.price %>
-      <img src="images/<%=book.image%>" width="200" height="150" alt="тут малюнки"/>
-    </li>
-  <% }) %>
-</ul>
+  <div class="card" style="width: 18rem;">
+    <img src="images/<%=book.image%>" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title"><%=book.title %></h5>
+      <p class="card-text"><%=book.price %></p>
+      <a href="#" class="btn btn-primary">Buy</a>
+    </div>
+  </div>
+    <% }) %>
+</div>

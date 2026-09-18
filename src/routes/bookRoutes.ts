@@ -3,9 +3,9 @@ import { books } from "../data/books.js";
 import { BookCreateType, BookType } from "../types/BookType.js";
 import { compareBook, getBooksByTitle } from "../utils/showBooks.js";
 import { BookResponseType } from "../types/BookResponseType.js";
- 
+
 const bookRouter = Router();
- 
+
 //отримання всіх книжок, або пошук по ?title=book_name
 bookRouter.get(
   "/",
@@ -19,7 +19,7 @@ bookRouter.get(
     if (title !== undefined) {
       our_books = getBooksByTitle(title, books);
     }
-    res.render("pages/books",{books})
+    res.render("pages/books", { books, title: "Books" });
     // const response: BookResponseType = {
     //   data: exist_book ? (our_books !== null ? our_books : books) : null,
     //   error: exist_book ? null : "Books list is empty",
@@ -31,7 +31,7 @@ bookRouter.get(
     // res.end(JSON.stringify(response));
   },
 );
- 
+
 //отримання книжки за id
 bookRouter.get("/:id", (req: Request<{ id: number }>, res) => {
   const id = +req.params.id;
@@ -44,38 +44,42 @@ bookRouter.get("/:id", (req: Request<{ id: number }>, res) => {
   };
   res.status(response.status).json(response);
 });
- 
+
 //створення книжки
-bookRouter.post("/", (req: Request<{}, BookResponseType, BookCreateType>, res) => {
-  const body = req.body;
-  const response: BookResponseType = {
-    data: null,
-    error: null,
-    status: 500,
-  };
-  if (body !== undefined) {
-    const id: number = books.length > 0 ? books.sort(compareBook)[0].id + 1 : 1;
-    const book: BookType = {
-      id,
-      title: body.title,
-      price: body.price,
-      is_active: body.is_active,
+bookRouter.post(
+  "/",
+  (req: Request<{}, BookResponseType, BookCreateType>, res) => {
+    const body = req.body;
+    const response: BookResponseType = {
+      data: null,
+      error: null,
+      status: 500,
     };
-    books.push(book);
-    response.data = book;
-    response.status = 201;
-  }
- 
-  res.status(response.status).json(response);
-});
- 
+    if (body !== undefined) {
+      const id: number =
+        books.length > 0 ? books.sort(compareBook)[0].id + 1 : 1;
+      const book: BookType = {
+        id,
+        title: body.title,
+        price: body.price,
+        is_active: body.is_active,
+      };
+      books.push(book);
+      response.data = book;
+      response.status = 201;
+    }
+
+    res.status(response.status).json(response);
+  },
+);
+
 // удаление книжки по id (DELETE)
 bookRouter.delete(
   "/:id",
   (req: Request<{ id: string }, BookResponseType>, res: Response) => {
     const id = Number(req.params.id);
     const bookIndex = books.findIndex((book) => book.id === id);
- 
+
     if (bookIndex === -1) {
       return res.status(404).json({
         data: null,
@@ -83,7 +87,7 @@ bookRouter.delete(
         status: 404,
       });
     }
- 
+
     const [deletedBook] = books.splice(bookIndex, 1);
     return res.status(200).json({
       data: deletedBook,
@@ -92,7 +96,7 @@ bookRouter.delete(
     });
   },
 );
- 
+
 // полное обновление книжки (PUT)
 bookRouter.put(
   "/:id",
@@ -102,7 +106,7 @@ bookRouter.put(
   ) => {
     const id = Number(req.params.id);
     const bookIndex = books.findIndex((book) => book.id === id);
- 
+
     if (bookIndex === -1) {
       return res.status(404).json({
         data: null,
@@ -110,7 +114,7 @@ bookRouter.put(
         status: 404,
       });
     }
- 
+
     const updatedBook: BookType = {
       id,
       title: req.body.title,
@@ -118,7 +122,7 @@ bookRouter.put(
       is_active: req.body.is_active,
     };
     books[bookIndex] = updatedBook;
- 
+
     return res.status(200).json({
       data: updatedBook,
       error: null,
@@ -126,5 +130,5 @@ bookRouter.put(
     });
   },
 );
- 
-export default bookRouter
+
+export default bookRouter;
