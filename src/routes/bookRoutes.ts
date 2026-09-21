@@ -3,8 +3,57 @@ import { books } from "../data/books.js";
 import { BookCreateType, BookType } from "../types/BookType.js";
 import { compareBook, getBooksByTitle } from "../utils/showBooks.js";
 import { BookResponseType } from "../types/BookResponseType.js";
+import path from "node:path"
+import multer from "multer"
 
 const bookRouter = Router();
+
+const storage = multer.diskStorage({
+  destination:(req,file,cb)=>{
+    cb(null,path.join("public","images"))
+  },
+  filename:(req,file,cb)=>{
+    const uniqueFileName = Date.now()+'_'+file.originalname
+    req.image = uniqueFileName
+    cb(null,uniqueFileName)
+  }
+})
+const upload = multer({storage})
+
+//http://localhost:PORT/book/add-book GET
+bookRouter.get(
+  "/add-book",
+  (
+    req: Request,
+    res: Response,
+  ) => {
+    res.render("pages/bookForm",{title:"Add Book"})
+  },
+);
+
+bookRouter.post(
+  "/add-book",
+  upload.single("image"),
+  (
+    req: Request<{},BookCreateType>,
+    res:Response,
+  ) => {
+    //DB
+    const {title, price, year} = req.body
+    const is_active = req.body.is_active?true:false
+    const book:BookType={
+      id:10000,
+      title,
+      price,
+      is_active,
+      publication_year:year,
+      image:req.image
+    }
+    console.log(book)
+    res.end()
+  },
+);
+
 
 //отримання всіх книжок, або пошук по ?title=book_name
 bookRouter.get(
@@ -130,5 +179,8 @@ bookRouter.put(
     });
   },
 );
+
+
+
 
 export default bookRouter;
