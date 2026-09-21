@@ -1,0 +1,15 @@
+.books {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.book-card {
+  width: 18rem;
+}
+
+.book-card img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}

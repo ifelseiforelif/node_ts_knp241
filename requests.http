@@ -1,0 +1,22 @@
+
+GET http://localhost:4200/books
+
+###
+
+GET  http://localhost:4200/books/10
+
+
+###
+
+GET http://localhost:4200/books?title=Чистий%20код
+
+
+###
+POST http://localhost:4200/books
+Content-Type: application/json
+
+{
+    "title": "Чистий код",
+    "price": 1000,
+    "is_active": true
+}

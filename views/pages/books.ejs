@@ -1,0 +1,43 @@
+<h1>Books</h1>
+
+<div class="books">
+
+    <% if (books.length > 0) { %>
+
+        <% books.forEach(book => { %>
+
+            <div class="card book-card">
+
+                <img
+                  src="/images/<%= book.image || 'nobook.jpg' %>"
+                  class="card-img-top"
+                  alt="<%= book.title %>"
+                >
+
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        <%= book.title %>
+                    </h5>
+
+                    <p class="card-text">
+                        <%= book.price %> грн
+                    </p>
+
+                    <a href="#" class="btn btn-primary">
+                        Buy
+                    </a>
+
+                </div>
+
+            </div>
+
+        <% }) %>
+
+    <% } else { %>
+
+        <p>Books list is empty</p>
+
+    <% } %>
+
+</div>
