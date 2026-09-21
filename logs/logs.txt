@@ -1,5 +1,0 @@
-type
-hhg
-typescript
-test
-type

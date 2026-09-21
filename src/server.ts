@@ -22,10 +22,11 @@ app.set("layout", path.join(__dirname, "..", "views", "layouts", "main"));
 app.use(express.static("public"));
 app.use(express.json()); //body -> json
 app.get("/", (req: Request<null, null, null, { title: string }>, res) => {
-  res.render("pages/home", {
-    title: "Home Page",
-    name: req.query.title,
-  });
+  // res.render("pages/home", {
+  //   title: "Home Page",
+  //   name: req.query.title,
+  // });
+  res.redirect("/books");
 });
 app.use("/books", router);
 

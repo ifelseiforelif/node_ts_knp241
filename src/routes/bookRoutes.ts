@@ -4,6 +4,7 @@ import { BookCreateType, BookType } from "../types/BookType.js";
 import { compareBook, getBooksByTitle } from "../utils/showBooks.js";
 import { BookResponseType } from "../types/BookResponseType.js";
 import { pool } from "../db/db_connection.js";
+import upload from "../middlewares/multer.js";
 
 const bookRouter = Router();
 
@@ -26,6 +27,53 @@ bookRouter.get(
     //   "Content-Type": "application/json",
     // });
     // res.end(JSON.stringify(response));
+  },
+);
+
+bookRouter.get("/add-book", (req, res) => {
+  res.render("pages/addBook", { title: "Add Book" });
+});
+
+bookRouter.post(
+  "/add-book",
+  upload.single("image"),
+  async (req: Request, res: Response) => {
+    try {
+      const { title, price, is_active, publication_year } = req.body;
+
+      // Ім'я збереженого файлу
+      const image = req.file?.filename ?? null;
+
+      const result = await pool.query(
+        `
+                INSERT INTO books
+                (
+                    title,
+                    price,
+                    is_active,
+                    image,
+                    publication_year
+                )
+                VALUES ($1, $2, $3, $4, $5)
+                RETURNING *
+                `,
+        [
+          title,
+          Number(price),
+          is_active === "true",
+          image,
+          publication_year ? Number(publication_year) : null,
+        ],
+      );
+
+      console.log("Created book:", result.rows[0]);
+
+      res.redirect("/books");
+    } catch (error) {
+      console.error(error);
+
+      res.status(500).send("Помилка при додаванні книги");
+    }
   },
 );
 
