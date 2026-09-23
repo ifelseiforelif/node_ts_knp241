@@ -5,7 +5,7 @@ import { compareBook, getBooksByTitle } from "../utils/showBooks.js";
 import { BookResponseType } from "../types/BookResponseType.js";
 import { pool } from "../db/db_connection.js";
 import upload from "../middlewares/multer.js";
-import 'dotenv/config'
+import "dotenv/config";
 
 const bookRouter = Router();
 
@@ -16,13 +16,12 @@ bookRouter.get(
     req: Request<{}, BookResponseType, null, { title: string }>,
     res: Response,
   ) => {
-    const data = await fetch(`${process.env.PATH_TO_JSON_SERVER}/books`)
-    const json = await data.json()
-    res.render("pages/books", { books: json, title: "Books" });
-    // const data = await pool.query("SELECT * FROM books");
+    // const data = await fetch(`${process.env.PATH_TO_JSON_SERVER}/books`)
+    // const json = await data.json()
+    // res.render("pages/books", { books: json, title: "Books" });
+    const data = await pool.query("SELECT * FROM books");
 
-    // res.render("pages/books", { books: data.rows, title: "Books" });
-
+    res.render("pages/books", { books: data.rows, title: "Books" });
 
     // const response: BookResponseType = {
     //   data: exist_book ? (our_books !== null ? our_books : books) : null,

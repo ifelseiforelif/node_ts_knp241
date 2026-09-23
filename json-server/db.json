@@ -340,5 +340,10 @@
       "book_id": 20
     }
   ],
+  "users":[],
+  "roles":[
+    {"id":"1", "role":"admin"},
+    {"id":"2", "role":"user"}
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }
